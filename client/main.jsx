@@ -1,42 +1,35 @@
-'use strict';
-
 import 'styles/main.scss';
 
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, IndexRoute, Route, Link, browserHistory, applyRouterMiddleware } from 'react-router';
-import { useScroll } from 'react-router-scroll';
+import createHistory from 'history/createBrowserHistory';
+import { Route, Router, Switch } from 'react-router-dom';
 import Index from 'components/Index/';
 import Detail from 'components/detail/';
-import Contact from 'components/contact/';
-import About from 'components/about/';
 
 require('smoothscroll-polyfill').polyfill();
 
-function hashLinkScroll() {
-  const { hash } = window.location;
-  if (hash !== '') {
-    // Push onto callback queue so it runs after the DOM is updated,
-    // this is required when navigating from a different page so that
-    // the element is rendered on the page before trying to getElementById.
+const history = createHistory();
+
+history.listen((location, action) => {
+  if (location.hash) {
     setTimeout(() => {
-      const id = hash.replace('#', '');
+      const id = location.hash.replace('#', '');
       const element = document.getElementById(id);
       if (element) {
-        element.scrollIntoView({behavior: "smooth"});
+        element.scrollIntoView({ behavior: 'smooth' });
       }
     }, 0);
+  } else {
+    window.scrollTo(0, 0);
   }
-}
+});
 
 render((
-  <Router
-    history={browserHistory}
-    render={applyRouterMiddleware(useScroll())}
-    onUpdate={hashLinkScroll}>
-    <Route path="/">
-      <IndexRoute component={Index} />
-    </Route>
-    <Route path="/detail/:category/:item" component={Detail}/>
+  <Router history={ history } >
+    <Switch>
+      <Route exact path='/detail/:category/:item' component={ Detail }/>
+      <Route path='/' component={ Index } />
+    </Switch>
   </Router>
 ), document.getElementById('js-main'));

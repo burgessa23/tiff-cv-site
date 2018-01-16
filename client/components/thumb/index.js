@@ -1,25 +1,26 @@
 import React, { Component } from 'react';
-import {browserHistory} from 'react-router';
+import { withRouter } from 'react-router-dom';
 
-export default class Thumb extends Component {
-  
+class Thumb extends Component {
+
   navigateToRoute(detail) {
-    browserHistory.push(`/detail/${this.props.navCategory}/${detail}`)
+    const { match, location, history } = this.props;
+    history.push(`/detail/${this.props.navCategory}/${detail}`)
   }
 
   render() {
     const props = this.props;
-    return(
+    return (
       <div className='thumb-wrapper col-xs-12 col-sm-6 col-lg-4'>
         <div
           className='thumb-inner'
-          style={{ 
+          style={{
             backgroundImage: `url(client/images/${props.backgroundImage})`,
             backgroundSize: `${props.css.backgroundSize}`,
             backgroundPositionX: `${props.css.backgroundPositionX}`,
-            backgroundPositionY: `${props.css.backgroundPositionY}`,
+            backgroundPositionY: `${props.css.backgroundPositionY}`
           }}
-          onClick={() => this.navigateToRoute(props.detail)}
+          onClick={ () => this.navigateToRoute(props.detail) }
           >
           <div>
             <h4>{props.title}</h4>
@@ -29,3 +30,7 @@ export default class Thumb extends Component {
     );
   }
 }
+
+const ConnectedThumb = withRouter(Thumb);
+
+export default ConnectedThumb;

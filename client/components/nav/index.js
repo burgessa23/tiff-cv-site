@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, browserHistory } from 'react-router'
+import { Link, browserHistory } from 'react-router-dom'
 const scrollIntoView = require('scroll-into-view');
 
 export default class Nav extends Component {
