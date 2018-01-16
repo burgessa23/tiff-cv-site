@@ -4,8 +4,8 @@ import Nav from '../nav';
 import CategoryNav from '../categoryNav';
 import Thumb from '../thumb';
 import myData from '../../../config/data.json';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
-import { Link } from 'react-router';
+import { CSSTransitionGroup } from 'react-transition-group';
+import { Link } from 'react-router-dom';
 
 export default class IndexComponent extends Component {
   constructor(props, ...args) {
@@ -19,8 +19,9 @@ export default class IndexComponent extends Component {
     }
   }
   componentWillMount() {
-    if(this.props.location.query.category) {
-      this.filterContent(this.props.location.query.category);
+    const location = this.props.location;
+    if (location.query && location.query.category) {
+      this.filterContent(location.query.category);
     }
   }
 
@@ -34,7 +35,7 @@ export default class IndexComponent extends Component {
     this.setState({
       menuOpen: !this.state.menuOpen
     })
-    if( msg && msg === 'desktop') {
+    if (msg && msg === 'desktop') {
       this.setState({
         platform: msg
       })
@@ -42,9 +43,9 @@ export default class IndexComponent extends Component {
   }
 
   renderLogo() {
-    if(this.state.platform === 'desktop') {
+    if (this.state.platform === 'desktop') {
       return 'ts_logo';
-    } else if(this.state.platform === 'mobile' && this.state.menuOpen) {
+    } else if (this.state.platform === 'mobile' && this.state.menuOpen) {
       return 'ts_logo_lite';
     } else {
       return 'ts_logo';
@@ -54,9 +55,9 @@ export default class IndexComponent extends Component {
 
   render() {
     const thumbnails = Object.keys(myData).map((item, idx) => {
-      if(~myData[item].category.indexOf(this.state.category) || this.state.category === 'all') {
+      if (~myData[item].category.indexOf(this.state.category) || this.state.category === 'all') {
         return (
-          <Thumb navCategory={this.state.category} key={ idx } counter={ idx+1 } { ...myData[item] } detail={ item } />
+          <Thumb navCategory={ this.state.category } key={ idx } counter={ idx + 1 } { ...myData[item] } detail={ item } />
         );
       }
     });
@@ -66,7 +67,7 @@ export default class IndexComponent extends Component {
         <section style={{ marginBottom: 120 }}>
           <Hero className='detail-hero'>
             <Link to='/'>
-              <img src={`client/images/${this.renderLogo()}.svg`} className='logo' />
+              <img src={ `client/images/${this.renderLogo()}.svg` } className='logo' />
             </Link>
             <Nav isOpen={ this.state.menuOpen } onOpen={ this.onOpen.bind(this) }/>
           </Hero>
@@ -75,21 +76,21 @@ export default class IndexComponent extends Component {
           <CategoryNav setCategory={ (evt) => this.filterContent(evt) } currentCategory={ this.state.category }/>
         </section>
         <section className='container'>
-            <ReactCSSTransitionGroup
+            <CSSTransitionGroup
               component='div'
               className='row'
-              transitionName="thumbs"
-              transitionAppear={true}
-              transitionAppearTimeout={500}
-              transitionEnterTimeout={500}
-              transitionLeaveTimeout={300}>
+              transitionName='thumbs'
+              transitionAppear={ true }
+              transitionAppearTimeout={ 500 }
+              transitionEnterTimeout={ 500 }
+              transitionLeaveTimeout={ 300 }>
               { thumbnails }
-            </ReactCSSTransitionGroup>
+            </CSSTransitionGroup>
         </section>
         <div className='bottom-section' id='about'>
           <section className='container'>
             <div className='row'>
-              <div className='col-xs-12 col-sm-12 col-lg-4' style={{padding: '20px 40px'}}>
+              <div className='col-xs-12 col-sm-12 col-lg-4' style={{ padding: '20px 40px' }}>
                 <h3>About Me</h3>
                   <p>I'm a Seattle-based, multidisciplinary designer with over a decade of experience under my belt. I've had the opportunity to work on a variety of projects, too: snowboards, magazines, websites, and beanies--those are just a few of the things I've designed.
                   </p>

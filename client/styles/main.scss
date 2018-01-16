@@ -13,8 +13,8 @@
 
 @mixin box-sizing($box-model) {
   -webkit-box-sizing: $box-model; // Safari <= 5
-     -moz-box-sizing: $box-model; // Firefox <= 19
-          box-sizing: $box-model;
+  -moz-box-sizing: $box-model; // Firefox <= 19
+  box-sizing: $box-model;
 }
 @mixin breakpoint($point) {
   @if $point == large {
@@ -38,13 +38,13 @@ $purple: #27223B;
 .container {
   margin: 0 auto 0;
   max-width: 100%;
-  @include breakpoint(small) { 
-     max-width: 90%;
+  @include breakpoint(small) {
+    max-width: 90%;
   }
-  // @include breakpoint(medium) { 
-  //    max-width: 90%;
+  // @include breakpoint(medium) {
+    //    max-width: 90%;
   // }
-  @include breakpoint(large) { 
+  @include breakpoint(large) {
     max-width: 1220px;
   }
 }
@@ -145,6 +145,7 @@ body {
       position: absolute;
       right: 20px;
       top: 10px;
+      outline: 0;
       &.is-active {
         .hamburger-inner {
           &:before, &:after {
@@ -346,18 +347,18 @@ ul {
 }
 
 sm-piece {
-	max-width: 380px;
-	max-height: 240px;
+  max-width: 380px;
+  max-height: 240px;
 }
 
 lg-piece {
-	max-width: 380px;
-	max-height: 380px;
+  max-width: 380px;
+  max-height: 380px;
 }
 
 /* pieces on-hover
-  overlay: rgba(39,34,59,0.50);
-*/
+overlay: rgba(39,34,59,0.50);
+ */
 
 p {
   font-family: Quicksand;
@@ -419,7 +420,7 @@ nav {
   font-size: 16px;
   color: #27223B;
   font-style: uppercase;
- }
+}
 
 /* All Digital Print Branding */
 sub-nav {

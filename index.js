@@ -51,7 +51,6 @@ if (env.production === false) {
     publicPath: '/client/',
     contentBase: './client/',
     inline: true,
-    hot: true,
     stats: false,
     historyApiFallback: true,
     headers: {

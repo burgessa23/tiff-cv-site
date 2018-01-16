@@ -3,12 +3,11 @@ import ReactDOM from 'react-dom';
 import Hero from '../hero';
 import Nav from '../nav';
 import myData from '../../../config/data.json';
-import { Link, browserHistory } from 'react-router';
+import { Link, withRouter } from 'react-router-dom';
 import ScrollToTop from 'react-scroll-up';
-import Parser from 'html-react-parser';
 import { StickyContainer, Sticky } from 'react-sticky';
 
-export default class Detail extends Component {
+class Detail extends Component {
   constructor(props, ...args) {
     super(props, ...args);
 
@@ -16,7 +15,7 @@ export default class Detail extends Component {
         menuOpen: false,
         platform: 'mobile',
         filteredList: Object.keys(myData).filter(item => {
-          if(myData[item].category === myData[this.props.params.item].category || this.props.params.category === 'all') {
+          if(myData[item].category === myData[this.props.match.params.item].category || this.props.match.params.category === 'all') {
             return myData[item];
           }
         }),
@@ -24,9 +23,13 @@ export default class Detail extends Component {
       }
   }
 
-  componentWillMount() {
+  createBody(body) {
+    return {__html: body};
+  }
+
+componentWillMount() {
     this.setState({
-      currentIndex: this.state.filteredList.indexOf(this.props.params.item)
+      currentIndex: this.state.filteredList.indexOf(this.props.match.params.item)
     });
   }
 
@@ -58,13 +61,14 @@ export default class Detail extends Component {
   }
 
   nextLink() {
-    const nextIndex = this.state.currentIndex+1;
-    if(nextIndex < this.state.filteredList.length) {
-      const nextId = this.state.filteredList[this.state.currentIndex+1];
+    const nextIndex = this.state.currentIndex + 1;
+    const { match, history } = this.props;
+    if (nextIndex < this.state.filteredList.length) {
+      const nextId = this.state.filteredList[this.state.currentIndex + 1];
       this.setState({
         currentIndex: nextIndex
       });
-      browserHistory.push(`/detail/${this.props.params.category}/${nextId}`)
+      history.push(`/detail/${match.params.category}/${nextId}`)
     }
   }
 
@@ -85,13 +89,14 @@ export default class Detail extends Component {
   }
 
   prevLink() {
-    const prevIndex = this.state.currentIndex-1;
-    if(prevIndex >= 0) {
-      const prevId = this.state.filteredList[this.state.currentIndex-1];
+    const prevIndex = this.state.currentIndex - 1;
+    const { match, history } = this.props;
+    if (prevIndex >= 0) {
+      const prevId = this.state.filteredList[this.state.currentIndex - 1];
       this.setState({
         currentIndex: prevIndex
       });
-      browserHistory.push(`/detail/${this.props.params.category}/${prevId}`)
+       history.push(`/detail/${match.params.category}/${prevId}`)
     }
   }
 
@@ -100,7 +105,7 @@ export default class Detail extends Component {
   }
 
   componentDidMount() {
-    if(myData[this.props.params.item].hasLaptop) {
+    if(myData[this.props.match.params.item].hasLaptop) {
       const node = ReactDOM.findDOMNode(this.laptopRef);
       setTimeout(() => {node.classList.toggle('scrolling')}, 3000);
     }
@@ -117,7 +122,7 @@ export default class Detail extends Component {
   }
 
   render() {
-    const item = this.props.params.item;
+    const item = this.props.match.params.item;
     const _marg = item === 'leafage' ? 0 : 30;
 
     return(
@@ -173,9 +178,7 @@ export default class Detail extends Component {
             <div id='parappa'>
               <div>
                 <h3 style={{ marginTop: 0 }}>{myData[item].title}</h3>
-                <span>
-                    { Parser( myData[item].text.body ) }
-                </span>
+                <span dangerouslySetInnerHTML = { this.createBody(myData[item].text.body) } />
                 <h5>
                   Category:
                 </h5>
@@ -202,3 +205,6 @@ export default class Detail extends Component {
     );
   }
 }
+
+const ConnectedDetail = withRouter(Detail);
+export default ConnectedDetail;
